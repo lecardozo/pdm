@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import argparse
 import importlib
-import itertools
 import os
 import pkgutil
 import sys
@@ -236,9 +235,7 @@ class Core:
             ```
         """
         entry_points = importlib_metadata.entry_points()
-        for plugin in itertools.chain(
-            entry_points.get("pdm", []), entry_points.get("pdm.plugin", [])
-        ):
+        for plugin in entry_points.select(group="pdm"):
             try:
                 plugin.load()(self)
             except Exception as e:
